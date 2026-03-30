@@ -1,0 +1,98 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "kotti_file"
+version = "0.1.0.dev0"
+description = "File attachment add-on for Kotti CMS"
+readme = {file = "README.md", content-type = "text/markdown"}
+requires-python = ">=3.10"
+license = {text = "BSD-derived (http://www.repoze.org/LICENSE.txt)"}
+authors = [
+    {name = "Kotti Developers", email = "kotti@googlegroups.com"},
+]
+keywords = ["kotti", "cms", "file", "attachment", "pyramid"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Web Environment",
+    "Framework :: Pyramid",
+    "License :: Repoze Public License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+]
+dependencies = [
+    "kotti @ git+https://github.com/disko/Kotti.git@master",
+]
+
+[project.urls]
+Homepage = "https://github.com/disko/kotti_file"
+Repository = "https://github.com/disko/kotti_file"
+
+[project.entry-points."kotti.configurators"]
+kotti_file = "kotti_file:includeme"
+
+[dependency-groups]
+test = [
+    "kotti[test] @ git+https://github.com/disko/Kotti.git@master",
+    "pytest>=8",
+    "pytest-cov",
+    "ruff>=0.11",
+    "setuptools<80",
+]
+docs = [
+    "mkdocs-material>=9.5",
+]
+
+# --- Build ---
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/kotti_file"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/src",
+    "/README.md",
+    "/LICENSE.txt",
+    "/CHANGES.txt",
+]
+
+# --- pytest ---
+
+[tool.pytest.ini_options]
+addopts = [
+    "--capture=no",
+    "--strict-markers",
+    "--tb=native",
+    "--cov=kotti_file",
+    "--cov-report=term-missing",
+]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+
+# --- ruff ---
+
+[tool.ruff]
+target-version = "py310"
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "B", "UP", "SIM", "RUF"]
+ignore = [
+    "F821",   # Undefined name — forward ref false positives
+    "B008",   # Function call in default argument
+    "SIM300", # Yoda conditions
+]
+
+[tool.ruff.format]
+# All defaults: double-quotes, 4-space indent, auto line endings
